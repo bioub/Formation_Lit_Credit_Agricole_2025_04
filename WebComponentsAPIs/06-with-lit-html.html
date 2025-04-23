@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      import { html, render } from './node_modules/lit-html/lit-html.js';
+
+      const rootEl = document.getElementById('root');
+
+      const myTemplate = (name) => html`<div>
+        <h1>Hello, ${name}!</h1>
+        <p>Current time: ${new Date().toLocaleString()}</p>
+      </div>`;
+
+      render(myTemplate('World'), rootEl);
+
+      setInterval(() => {
+        render(myTemplate('World'), rootEl);
+      }, 1000);
+    </script>
+  </body>
+</html>

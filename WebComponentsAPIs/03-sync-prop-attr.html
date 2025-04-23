@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <my-counter count="3"></my-counter>
+    <!-- attributeChangedCallback called -->
+    <script>
+      class Counter extends HTMLElement {
+        static observedAttributes = ['count'];
+        get count() {
+          return Number(this.getAttribute('count'));
+        }
+        // counter.count = 0; // ES2022 class properties
+        set count(value) {
+          this.setAttribute('count', String(value));
+        }
+        // counter.setAttribute('count', '3'); // attributeChangedCallback called
+        attributeChangedCallback(name, oldValue, newValue) {
+          this._updateRendering();
+        }
+        _updateRendering() {
+          // get count()
+          this.innerText = this.count;
+        }
+      }
+      customElements.define('my-counter', Counter);
+
+      const myCounterEl = document.querySelector('my-counter');
+      setTimeout(() => {
+        // myCounterEl.count = 4; // attributeChangedCallback not called
+        myCounterEl.setAttribute('count', '4'); // attributeChangedCallback called
+      }, 2000);
+    </script>
+  </body>
+</html>

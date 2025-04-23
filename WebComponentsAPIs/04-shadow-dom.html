@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <my-counter></my-counter>
+  <script>
+    class Counter extends HTMLElement {
+      constructor() {
+        super();
+        const shadow = this.attachShadow({ mode: 'open' });
+        shadow.innerHTML = `<button>0</button>`;
+      }
+    }
+    customElements.define('my-counter', Counter);
+
+    const myCounterEl = document.querySelector('my-counter');
+    console.log(myCounterEl.shadowRoot); // #shadow-root (open)
+    console.log(myCounterEl.shadowRoot.querySelector('button')); // <button>0</button>
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <ft-not-defined></ft-not-defined>
+  <ft-defined></ft-defined>
+  <button>Click</button>
+  <script>
+    class Defined extends HTMLElement {
+      hello() {
+        console.log('hello'); 
+      }
+    }
+    customElements.define('ft-defined', Defined);
+
+    const button = document.querySelector('button');
+    button.addEventListener('click', () => {
+      const notDefined = document.querySelector('ft-not-defined');
+      const defined = document.querySelector('ft-defined');
+      console.dir(notDefined instanceof HTMLElement); // true
+      console.dir(notDefined instanceof Defined); // false
+      console.dir(defined instanceof HTMLElement); // true
+      console.dir(defined instanceof Defined); // true
+      defined.hello(); // hello
+    });
+  </script>
+</body>
+</html>
