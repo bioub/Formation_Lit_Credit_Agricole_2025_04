@@ -3,6 +3,7 @@ import '../components/users-filter';
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { repeat } from 'lit/directives/repeat.js';
 
 import { di } from '../di';
 
@@ -13,21 +14,18 @@ interface User {
 
 @customElement('my-users')
 export class UsersComponent extends LitElement {
-  @property({ attribute: false })
+  @state()
   router = di.inject('router');
 
-  @property({ type: String })
+  @state()
   searchTerm = '';
 
-  @property({ type: Array })
+  @state()
   users: User[] = [
     { id: 1, name: 'Pierre' },
     { id: 2, name: 'Paul' },
     { id: 3, name: 'Jacques' },
   ];
-
-  @state()
-  filter = '';
 
   handleClick(event: MouseEvent) {
     event.preventDefault();
@@ -40,20 +38,46 @@ export class UsersComponent extends LitElement {
   }
 
   handleFilterChanged(event: CustomEvent) {
-    this.filter = event.detail;
+    this.searchTerm = event.detail;
   }
 
   render() {
     return html`
       <div class="left">
-        <my-users-filter></my-users-filter>
+        <my-users-filter
+          filter=${this.searchTerm}
+          @filter-changed=${this.handleFilterChanged}
+        ></my-users-filter>
         <nav>
-          ${this.users.map((user) => html`<a class="${classMap({active: user.id % 2 === 0})}" href="#"> ${user.name} </a>`)}
+          <!-- ${this.users
+            .filter((user) =>
+              user.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
+            )
+            .map(
+              (user) =>
+                html`<a
+                  class="${classMap({ active: user.id % 2 === 0 })}"
+                  href="#"
+                >
+                  ${user.name}
+                </a>`,
+            )} -->
+          ${repeat(
+            this.users.filter((user) =>
+              user.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
+            ),
+            (user) => user.id,
+            (user) =>
+              html`<a
+                class="${classMap({ active: user.id % 2 === 0 })}"
+                href="#"
+              >
+                ${user.name}
+              </a>`,
+          )}
         </nav>
       </div>
-      <div class="right">
-        
-      </div>
+      <div class="right"></div>
     `;
   }
 
