@@ -6,6 +6,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
 
 import { di } from '../di';
+import { UsersController } from '../services/UsersController';
 
 interface User {
   id: number;
@@ -27,6 +28,8 @@ export class UsersComponent extends LitElement {
     { id: 3, name: 'Jacques' },
   ];
 
+  usersController = new UsersController(this);
+
   handleClick(event: MouseEvent) {
     event.preventDefault();
     if (event.target instanceof HTMLAnchorElement) {
@@ -40,6 +43,16 @@ export class UsersComponent extends LitElement {
   handleFilterChanged(event: CustomEvent) {
     this.searchTerm = event.detail;
   }
+
+  handleLinkClick(event: MouseEvent) {
+    event.preventDefault();
+    if (event.target instanceof HTMLAnchorElement) {
+      // Typage explicite pour éviter l'erreur unknown
+      const router = this.router as any;
+      router.push(event.target.pathname);
+    }
+  }
+
 
   render() {
     return html`
@@ -70,14 +83,17 @@ export class UsersComponent extends LitElement {
             (user) =>
               html`<a
                 class="${classMap({ active: user.id % 2 === 0 })}"
-                href="#"
+                href=${user.id}
+                @click=${this.handleLinkClick}
               >
                 ${user.name}
               </a>`,
           )}
         </nav>
       </div>
-      <div class="right"></div>
+      <div class="right">
+        <rlx-flx-router-view></rlx-flx-router-view>
+      </div>
     `;
   }
 

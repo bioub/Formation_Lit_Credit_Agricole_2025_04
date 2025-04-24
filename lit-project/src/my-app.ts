@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, PropertyValues, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import './my-hello.js';
 import './my-list.js'
@@ -7,6 +7,9 @@ import './my-counter.js'
 import './my-card.js'
 import './my-tabs.js'
 import './my-tab.js'
+import './my-select.js'
+import { MySelect } from "./my-select.js";
+import { createRef, ref } from "lit/directives/ref.js";
 
 @customElement("my-app")
 export class MyApp extends LitElement {
@@ -27,6 +30,13 @@ export class MyApp extends LitElement {
     console.log(event.target); // ne traverse pas le shadow DOM
     console.log(event.composedPath()); // chemin complet depuis l'élément cliqué jusqu'à l'élément racine
     console.log(event.composedPath()[0]); // équivalent à event.target mais qui traverse le shadow DOM
+  }
+
+  mySelect = createRef<MySelect>();
+
+  firstUpdated() {
+    // this.mySelect = this.shadowRoot?.querySelector('my-select') as MySelect;
+    this.mySelect?.value?.openMenu();
   }
 
   render() {
@@ -50,6 +60,10 @@ export class MyApp extends LitElement {
             <p>Content for Tab 2</p>
           </my-tab>
         </my-tabs>
+
+        <my-select value=${this.name} .items=${this.names} @value-change=${this.handleSelectChange}></my-select>
+        <my-select ${ref(this.mySelect)} value=${this.name} .items=${this.names} @value-change=${this.handleSelectChange}></my-select>
+        <my-select value=${this.name} .items=${this.names} @value-change=${this.handleSelectChange}></my-select>
       </div>
     `;
   }

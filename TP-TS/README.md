@@ -76,7 +76,7 @@ Y ajouter cette méthode :
 ```js
 async hostConnected() {
   const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  this.items = await res.tson();
+  this.items = await res.json();
   this.host.requestUpdate();
 }
 ```

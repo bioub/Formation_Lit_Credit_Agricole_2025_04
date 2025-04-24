@@ -2,11 +2,16 @@ import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { di } from '../di';
+import { Router } from '../lib/router';
 
 @customElement('my-user-details')
 export class UserDetailsComponent extends LitElement {
   @property({ attribute: false })
-  router = di.inject('router');
+  router: Router = di.inject('router');
+
+  updated() {
+    console.log((this.router.resolver.route.parameters as any).userId)
+  }
 
   render() {
     return html`

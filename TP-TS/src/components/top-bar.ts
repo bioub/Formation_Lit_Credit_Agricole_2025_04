@@ -1,12 +1,17 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, PropertyValues, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { di } from "../di";
+import { consume } from "@lit/context";
+import { settingsContext, SettingsController } from "../services/SettingsController";
 
 @customElement("my-top-bar")
 export class TopBarComponent extends LitElement {
   @property({ attribute: false })
   router = di.inject("router");
+
+  @consume({ context: settingsContext })
+  settings!: SettingsController;
 
   handleClick(event: MouseEvent) {
     event.preventDefault();
@@ -17,9 +22,13 @@ export class TopBarComponent extends LitElement {
     }
   }
 
+  firstUpdated() {
+    this.settings.addHost(this);
+  }
+
   render() {
     return html`
-      <h1>My App</h1>
+      <h1>${this.settings.state.title}</h1>
       <nav>
         <a href="/" @click=${this.handleClick}>Home</a>
         <a href="/settings" @click=${this.handleClick}>Settings</a>
