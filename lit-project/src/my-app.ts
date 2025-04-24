@@ -4,6 +4,9 @@ import './my-hello.js';
 import './my-list.js'
 
 import './my-counter.js'
+import './my-card.js'
+import './my-tabs.js'
+import './my-tab.js'
 
 @customElement("my-app")
 export class MyApp extends LitElement {
@@ -35,6 +38,18 @@ export class MyApp extends LitElement {
         <my-hello .nomDeFamille=${this.name}></my-hello>
         <my-list .items=${this.names} ></my-list>
         <my-counter></my-counter>
+        <my-card title="My Text Title">
+          <my-counter></my-counter>
+        </my-card>
+
+        <my-tabs name="Romain">
+          <my-tab label="Tab 1">
+            <p>Content for Tab 1</p>
+          </my-tab>
+          <my-tab label="Tab 2">
+            <p>Content for Tab 2</p>
+          </my-tab>
+        </my-tabs>
       </div>
     `;
   }
